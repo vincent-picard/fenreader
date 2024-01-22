@@ -14,15 +14,36 @@ pub enum Piece {
     King,
 }
 
+pub struct ColoredPiece(Color, Piece);
+
 impl fmt::Display for Piece {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Piece::Pawn => write!(f, "P"),
-            Piece::Knight => write!(f, "N"),
-            Piece::Bishop => write!(f, "B"),
-            Piece::Rook => write!(f, "R"),
-            Piece::Queen => write!(f, "Q"),
-            Piece::King => write!(f, "K"),
+            Piece::Pawn => write!(f, "♙"),
+            Piece::Knight => write!(f, "♘"),
+            Piece::Bishop => write!(f, "♗"),
+            Piece::Rook => write!(f, "♖"),
+            Piece::Queen => write!(f, "♕"),
+            Piece::King => write!(f, "♔"),
+        }
+    }
+}
+
+impl fmt::Display for ColoredPiece {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            ColoredPiece(Color::White, Piece::Pawn) => write!(f, "♙"),
+            ColoredPiece(Color::White, Piece::Knight) => write!(f, "♘"),
+            ColoredPiece(Color::White, Piece::Bishop) => write!(f, "♗"),
+            ColoredPiece(Color::White, Piece::Rook) => write!(f, "♖"),
+            ColoredPiece(Color::White, Piece::Queen) => write!(f, "♕"),
+            ColoredPiece(Color::White, Piece::King) => write!(f, "♔"),
+            ColoredPiece(Color::Black, Piece::Pawn) => write!(f, "♟"),
+            ColoredPiece(Color::Black, Piece::Knight) => write!(f, "♞"),
+            ColoredPiece(Color::Black, Piece::Bishop) => write!(f, "♝"),
+            ColoredPiece(Color::Black, Piece::Rook) => write!(f, "♜"),
+            ColoredPiece(Color::Black, Piece::Queen) => write!(f, "♛"),
+            ColoredPiece(Color::Black, Piece::King) => write!(f, "♚"),
         }
     }
 }
@@ -41,3 +62,33 @@ impl Piece {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn piece_to_string() {
+        assert_eq!("♙", Piece::Pawn.to_string());
+        assert_eq!("♘", Piece::Knight.to_string());
+        assert_eq!("♗", Piece::Bishop.to_string());
+        assert_eq!("♖", Piece::Rook.to_string());
+        assert_eq!("♕", Piece::Queen.to_string());
+        assert_eq!("♔", Piece::King.to_string());
+    }
+
+    #[test]
+    fn colored_piece_to_string() {
+        assert_eq!("♙", ColoredPiece(Color::White, Piece::Pawn).to_string());
+        assert_eq!("♘", ColoredPiece(Color::White, Piece::Knight).to_string());
+        assert_eq!("♗", ColoredPiece(Color::White, Piece::Bishop).to_string());
+        assert_eq!("♖", ColoredPiece(Color::White, Piece::Rook).to_string());
+        assert_eq!("♕", ColoredPiece(Color::White, Piece::Queen).to_string());
+        assert_eq!("♔", ColoredPiece(Color::White, Piece::King).to_string());
+        assert_eq!("♟", ColoredPiece(Color::Black, Piece::Pawn).to_string());
+        assert_eq!("♞", ColoredPiece(Color::Black, Piece::Knight).to_string());
+        assert_eq!("♝", ColoredPiece(Color::Black, Piece::Bishop).to_string());
+        assert_eq!("♜", ColoredPiece(Color::Black, Piece::Rook).to_string());
+        assert_eq!("♛", ColoredPiece(Color::Black, Piece::Queen).to_string());
+        assert_eq!("♚", ColoredPiece(Color::Black, Piece::King).to_string());
+    }
+}
