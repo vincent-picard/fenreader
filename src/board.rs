@@ -1,10 +1,29 @@
 use std::fmt;
+use std::iter;
 
+#[derive(Clone, Copy)]
 pub enum Color {
     White,
     Black,
 }
 
+impl Color {
+    pub fn is_white(&self) -> bool {
+        match self {
+            Color::White => true,
+            Color::Black => false,
+        }
+    }
+
+    pub fn is_black(&self) -> bool {
+        match self {
+            Color::White => false,
+            Color::Black => true,
+        }
+    }
+}
+
+#[derive(Clone, Copy)]
 pub enum Piece {
     Pawn,
     Knight,
@@ -14,7 +33,69 @@ pub enum Piece {
     King,
 }
 
+#[derive(Clone, Copy)]
 pub struct ColoredPiece(Color, Piece);
+
+pub struct Square {
+    row: u8,
+    col: u8,
+}
+
+impl Square {
+    pub fn from_coord(row: u8, col: u8) -> Result<Square, &'static str> {
+        if !(row < 8) {
+            Err("Invalid row number")
+        } else if !(col < 8) {
+            Err("Invalid column number")
+        } else {
+            Ok(Square{row, col})
+        }
+    }
+
+    fn to_index(&self) -> usize {
+        (self.row * 8 + self.col).into()
+    }
+
+    fn color(&self) -> Color {
+        let n = self.row + self.col;
+        if n % 2 == 0 {
+            Color::Black
+        } else {
+            Color::White
+        }
+    }
+
+}
+
+pub struct Board {
+    content: Vec<Option<ColoredPiece>>,
+}
+
+impl Board {
+    pub fn new() -> Board {
+        Board {
+            content: iter::repeat(None).take(64).collect(),
+        }
+    }
+
+    pub fn get(&self, square: &Square) -> &Option<ColoredPiece> {
+        &self.content[square.to_index()]
+    }
+    
+    pub fn place(&mut self, square: &Square, piece: ColoredPiece) {
+        let s = &mut self.content[square.to_index()];
+        if s.is_some() {
+            panic!("place : a piece already exists in this square");
+        }
+        *s = Some(piece);
+    }
+
+    pub fn clear_square(&mut self, square: &Square) {
+        self.content[square.to_index()] = None;
+    }
+
+}
+
 
 impl fmt::Display for Piece {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -91,4 +172,13 @@ mod tests {
         assert_eq!("♛", ColoredPiece(Color::Black, Piece::Queen).to_string());
         assert_eq!("♚", ColoredPiece(Color::Black, Piece::King).to_string());
     }
+
+    #[test]
+    fn colors_of_squares() {
+        assert!(Square::from_coord(0, 0).expect("Should be valid coordinates").color().is_black());
+        assert!(Square::from_coord(1, 1).expect("Should be valid coordinates").color().is_black());
+        assert!(Square::from_coord(0, 2).expect("Should be valid coordinates").color().is_black());
+        assert!(Square::from_coord(0, 7).expect("Should be valid coordinates").color().is_white());
+    }
+        
 }
