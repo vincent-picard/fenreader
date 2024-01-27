@@ -43,9 +43,9 @@ pub struct Square {
 
 impl Square {
     pub fn from_coord(row: u8, col: u8) -> Result<Square, &'static str> {
-        if !(row < 8) {
+        if row >= 8 {
             Err("Invalid row number")
-        } else if !(col < 8) {
+        } else if col>= 8 {
             Err("Invalid column number")
         } else {
             Ok(Square{row, col})
