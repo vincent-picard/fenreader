@@ -29,3 +29,16 @@ impl Square {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn colors_of_squares() {
+        assert!(Square::from_coord(0, 0).expect("Should be valid coordinates").color().is_black());
+        assert!(Square::from_coord(1, 1).expect("Should be valid coordinates").color().is_black());
+        assert!(Square::from_coord(0, 2).expect("Should be valid coordinates").color().is_black());
+        assert!(Square::from_coord(0, 7).expect("Should be valid coordinates").color().is_white());
+    }
+        
+}
