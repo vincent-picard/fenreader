@@ -1,4 +1,5 @@
-use fenreader::board::{Color, Piece};
+use fenreader::board::Piece;
+use fenreader::board::color::Color;
 
 fn main() {
     fenreader::test();
