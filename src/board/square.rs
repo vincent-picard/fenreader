@@ -16,6 +16,7 @@ impl Square {
         }
     }
 
+    // Returns an index in [0, 64[, unique to each square
     pub fn to_index(&self) -> usize {
         (self.row * 8 + self.col).into()
     }
@@ -52,6 +53,18 @@ mod tests {
                 let index = square.to_index();
                 assert!(!dest.contains(&index));
                 dest.insert(index);
+            }
+        }
+    }
+
+    #[test]
+    fn to_index_bounds() {
+        for i in 0..8 {
+            for j in 0..8 {
+                let square = Square::from_coord(i, j).expect("Should be valid coord");
+                let index = square.to_index();
+                assert!(0 <= index);
+                assert!(index < 64);
             }
         }
     }
