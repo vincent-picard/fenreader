@@ -1,5 +1,6 @@
 use crate::board::Color;
 
+#[derive(PartialEq, Debug)]
 pub struct Square {
     row: u8,
     col: u8,
@@ -99,5 +100,26 @@ mod tests {
             }
         }
     }
+
+    #[test]
+    fn algebraic_incorrect_input() {
+        assert!(Square::from_algebraic("a9").is_err());
+        assert!(Square::from_algebraic("A7").is_err());
+        assert!(Square::from_algebraic("3a").is_err());
+        assert!(Square::from_algebraic("i3").is_err());
+        assert!(Square::from_algebraic("k4").is_err());
+        assert!(Square::from_algebraic("42").is_err());
+        assert!(Square::from_algebraic("h0").is_err());
+        assert!(Square::from_algebraic("c-3").is_err());
+    }
+
+    #[test]
+    fn algebraic_correct_input() {
+        assert_eq!(Square::from_algebraic("a1"), Square::from_coord(0, 0));
+        assert_eq!(Square::from_algebraic("h1"), Square::from_coord(0, 7));
+        assert_eq!(Square::from_algebraic("a8"), Square::from_coord(7, 0));
+        assert_eq!(Square::from_algebraic("h8"), Square::from_coord(7, 7));
+    }
+
 }
 
