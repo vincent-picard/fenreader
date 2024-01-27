@@ -33,6 +33,7 @@ impl Square {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::collections::HashSet;
 
     #[test]
     fn colors_of_squares() {
@@ -41,5 +42,18 @@ mod tests {
         assert!(Square::from_coord(0, 2).expect("Should be valid coordinates").color().is_black());
         assert!(Square::from_coord(0, 7).expect("Should be valid coordinates").color().is_white());
     }
-        
+
+    #[test]
+    fn to_index_is_injective() {
+        let mut dest = HashSet::new();
+        for i in 0..8 {
+            for j in 0..8 {
+                let square = Square::from_coord(i, j).expect("Should be valid coord");
+                let index = square.to_index();
+                assert!(!dest.contains(&index));
+                dest.insert(index);
+            }
+        }
+    }
 }
+
