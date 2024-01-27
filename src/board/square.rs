@@ -16,6 +16,38 @@ impl Square {
         }
     }
 
+    pub fn from_algebraic(s: &str) -> Result<Square, &'static str> {
+        let chars: Vec<char> = s.chars().collect();
+        if chars.len() != 2 {
+            return Err("Algebraic coord parse error : string length must be 2");
+        }
+        let letter = chars[0];
+        let digit = chars[1];
+        let row_number = match digit {
+            '1' => 0,
+            '2' => 1,
+            '3' => 2,
+            '4' => 3,
+            '5' => 4,
+            '6' => 5,
+            '7' => 6,
+            '8' => 7,
+            _ => return Err("Algebraic coord parse error, digit is incorrect"),
+        };
+        let col_number = match letter {
+            'a' => 0,
+            'b' => 1,
+            'c' => 2,
+            'd' => 3,
+            'e' => 4,
+            'f' => 5,
+            'g' => 6,
+            'h' => 7,
+            _ => return Err("Algebraic coord parse error, letter is incorrect"),
+        };
+        Self::from_coord(row_number, col_number)
+    }
+
     // Returns an index in [0, 64[, unique to each square
     pub fn to_index(&self) -> usize {
         (self.row * 8 + self.col).into()
@@ -63,7 +95,6 @@ mod tests {
             for j in 0..8 {
                 let square = Square::from_coord(i, j).expect("Should be valid coord");
                 let index = square.to_index();
-                assert!(0 <= index);
                 assert!(index < 64);
             }
         }
