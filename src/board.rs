@@ -23,6 +23,23 @@ impl Color {
     }
 }
 
+#[cfg(test)]
+mod color_test {
+    use super::*;
+
+    #[test]
+    fn white_is_white() {
+        assert!(Color::White.is_white());
+        assert!(!Color::White.is_black());
+    }
+
+    #[test]
+    fn black_is_black() {
+        assert!(Color::Black.is_black());
+        assert!(!Color::Black.is_white());
+    }
+}
+
 #[derive(Clone, Copy)]
 pub enum Piece {
     Pawn,
@@ -64,7 +81,6 @@ impl Square {
             Color::White
         }
     }
-
 }
 
 pub struct Board {
