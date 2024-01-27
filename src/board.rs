@@ -22,7 +22,7 @@ impl Board {
         &self.content[square.to_index()]
     }
     
-    pub fn place(&mut self, square: &Square, piece: ColoredPiece) {
+    pub fn set(&mut self, square: &Square, piece: ColoredPiece) {
         let s = &mut self.content[square.to_index()];
         if s.is_some() {
             panic!("place : a piece already exists in this square");
@@ -42,6 +42,14 @@ impl Default for Board {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-
+    #[test]
+    fn new_has_correct_size() {
+        let board = Board::new();
+        assert!(board.content.len() == 64);
+    }
+}
 
