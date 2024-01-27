@@ -1,8 +1,10 @@
 pub mod color;
+pub mod square;
 
 use std::fmt;
 use std::iter;
 use color::Color;
+use square::Square;
 
 #[derive(Clone, Copy)]
 pub enum Piece {
@@ -16,36 +18,6 @@ pub enum Piece {
 
 #[derive(Clone, Copy)]
 pub struct ColoredPiece(Color, Piece);
-
-pub struct Square {
-    row: u8,
-    col: u8,
-}
-
-impl Square {
-    pub fn from_coord(row: u8, col: u8) -> Result<Square, &'static str> {
-        if row >= 8 {
-            Err("Invalid row number")
-        } else if col>= 8 {
-            Err("Invalid column number")
-        } else {
-            Ok(Square{row, col})
-        }
-    }
-
-    fn to_index(&self) -> usize {
-        (self.row * 8 + self.col).into()
-    }
-
-    fn color(&self) -> Color {
-        let n = self.row + self.col;
-        if n % 2 == 0 {
-            Color::Black
-        } else {
-            Color::White
-        }
-    }
-}
 
 pub struct Board {
     content: Vec<Option<ColoredPiece>>,
