@@ -5,7 +5,7 @@ pub mod piece;
 use std::iter;
 use color::Color;
 use square::Square;
-use piece::ColoredPiece;
+use piece::{Piece, ColoredPiece};
 
 pub struct Board {
     content: Vec<Option<ColoredPiece>>,
@@ -50,6 +50,15 @@ mod tests {
     fn new_has_correct_size() {
         let board = Board::new();
         assert!(board.content.len() == 64);
+    }
+
+    #[test]
+    #[should_panic]
+    fn two_pieces_on_same_square() {
+        let mut board = Board::new();
+        let g1 = Square::from_algebraic("g1").unwrap();
+        board.set(&g1, ColoredPiece(Color::White, Piece::Knight));
+        board.set(&g1, ColoredPiece(Color::White, Piece::Queen));
     }
 }
 
