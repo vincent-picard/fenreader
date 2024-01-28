@@ -1,7 +1,7 @@
 use crate::board::color::Color;
 use std::fmt;
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq, Debug)]
 pub enum Piece {
     Pawn,
     Knight,
@@ -11,7 +11,7 @@ pub enum Piece {
     King,
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq, Debug)]
 pub struct ColoredPiece(pub Color, pub Piece);
 
 impl fmt::Display for Piece {
