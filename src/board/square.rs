@@ -1,4 +1,5 @@
 use crate::board::Color;
+use std::fmt;
 
 #[derive(PartialEq, Debug)]
 pub struct Square {
@@ -64,10 +65,59 @@ impl Square {
     }
 }
 
+impl fmt::Display for Square {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let letter = match self.col {
+            0 => 'a',
+            1 => 'b',
+            2 => 'c',
+            3 => 'd',
+            4 => 'e',
+            5 => 'f',
+            6 => 'g',
+            7 => 'h',
+            _ => panic!("Try to display invalid square"),
+        };
+        let digit = if self.row < 8 {
+            self.row + 1
+        } else {
+            panic!("Try to display invalid square")
+        };
+        write!(f, "{}{}", letter, digit)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     use std::collections::HashSet;
+
+    #[test]
+    fn square_tostring() {
+        assert_eq!(Square::from_coord(0, 0).unwrap().to_string(), "a1");
+        assert_eq!(Square::from_coord(1, 4).unwrap().to_string(), "e2");
+        assert_eq!(Square::from_coord(7, 7).unwrap().to_string(), "h8");
+    }
+
+    #[test]
+    #[should_panic]
+    fn panic_tostring_1() {
+        let invalid_square = Square {
+            row: 18,
+            col: 5,
+        };
+        println!("{}", invalid_square);
+    }
+
+    #[test]
+    #[should_panic]
+    fn panic_tostring_2() {
+        let invalid_square = Square {
+            row: 2,
+            col: 42,
+        };
+        println!("{}", invalid_square);
+    }
 
     #[test]
     fn colors_of_squares() {
