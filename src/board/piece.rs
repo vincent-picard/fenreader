@@ -12,7 +12,7 @@ pub enum Piece {
 }
 
 #[derive(Clone, Copy)]
-pub struct ColoredPiece(Color, Piece);
+pub struct ColoredPiece(pub Color, pub Piece);
 
 impl fmt::Display for Piece {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
