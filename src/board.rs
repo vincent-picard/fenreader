@@ -60,5 +60,17 @@ mod tests {
         board.set(&g1, ColoredPiece(Color::White, Piece::Knight));
         board.set(&g1, ColoredPiece(Color::White, Piece::Queen));
     }
+
+    #[test]
+    fn set_and_get() {
+        let mut board = Board::new();
+        let a5 = Square::from_algebraic("a5").unwrap();
+        let g6 = Square::from_algebraic("g6").unwrap();
+        board.set(&a5, ColoredPiece(Color::Black, Piece::Bishop));
+        assert!(board.get(&g6).is_none());
+        assert!(board.get(&a5).is_some());
+        assert_eq!(*board.get(&a5), Some(ColoredPiece(Color::Black, Piece::Bishop)));
+    }
+
 }
 
