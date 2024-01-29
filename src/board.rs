@@ -1,11 +1,11 @@
 pub mod color;
-pub mod square;
 pub mod piece;
+pub mod square;
 
-use std::iter;
 use color::Color;
+use piece::ColoredPiece;
 use square::Square;
-use piece::{Piece, ColoredPiece};
+use std::iter;
 
 pub struct Board {
     content: Vec<Option<ColoredPiece>>,
@@ -21,7 +21,7 @@ impl Board {
     pub fn get(&self, square: &Square) -> &Option<ColoredPiece> {
         &self.content[square.to_index()]
     }
-    
+
     pub fn set(&mut self, square: &Square, piece: ColoredPiece) {
         let s = &mut self.content[square.to_index()];
         if s.is_some() {
@@ -33,7 +33,6 @@ impl Board {
     pub fn clear_square(&mut self, square: &Square) {
         self.content[square.to_index()] = None;
     }
-
 }
 
 impl Default for Board {
@@ -45,6 +44,7 @@ impl Default for Board {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use piece::Piece;
 
     #[test]
     fn new_has_correct_size() {
@@ -69,8 +69,9 @@ mod tests {
         board.set(&a5, ColoredPiece(Color::Black, Piece::Bishop));
         assert!(board.get(&g6).is_none());
         assert!(board.get(&a5).is_some());
-        assert_eq!(*board.get(&a5), Some(ColoredPiece(Color::Black, Piece::Bishop)));
+        assert_eq!(
+            *board.get(&a5),
+            Some(ColoredPiece(Color::Black, Piece::Bishop))
+        );
     }
-
 }
-
