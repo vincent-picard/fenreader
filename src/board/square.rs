@@ -1,7 +1,7 @@
 use crate::board::Color;
 use std::fmt;
 
-#[derive(PartialEq, Debug)]
+#[derive(Clone, Copy, PartialEq, Debug)]
 pub struct Square {
     row: u8,
     col: u8,
@@ -51,11 +51,11 @@ impl Square {
     }
 
     // Returns an index in [0, 64[, unique to each square
-    pub fn to_index(&self) -> usize {
+    pub fn to_index(self) -> usize {
         (self.row * 8 + self.col).into()
     }
 
-    pub fn color(&self) -> Color {
+    pub fn color(self) -> Color {
         let n = self.row + self.col;
         if n % 2 == 0 {
             Color::Black

@@ -18,11 +18,11 @@ impl Board {
         }
     }
 
-    pub fn get(&self, square: &Square) -> &Option<ColoredPiece> {
+    pub fn get(&self, square: Square) -> &Option<ColoredPiece> {
         &self.content[square.to_index()]
     }
 
-    pub fn set(&mut self, square: &Square, piece: ColoredPiece) {
+    pub fn set(&mut self, square: Square, piece: ColoredPiece) {
         let s = &mut self.content[square.to_index()];
         if s.is_some() {
             panic!("place : a piece already exists in this square");
@@ -30,7 +30,7 @@ impl Board {
         *s = Some(piece);
     }
 
-    pub fn clear_square(&mut self, square: &Square) {
+    pub fn clear_square(&mut self, square: Square) {
         self.content[square.to_index()] = None;
     }
 }
@@ -57,8 +57,8 @@ mod tests {
     fn two_pieces_on_same_square() {
         let mut board = Board::new();
         let g1 = Square::from_algebraic("g1").unwrap();
-        board.set(&g1, ColoredPiece(Color::White, Piece::Knight));
-        board.set(&g1, ColoredPiece(Color::White, Piece::Queen));
+        board.set(g1, ColoredPiece(Color::White, Piece::Knight));
+        board.set(g1, ColoredPiece(Color::White, Piece::Queen));
     }
 
     #[test]
@@ -66,11 +66,11 @@ mod tests {
         let mut board = Board::new();
         let a5 = Square::from_algebraic("a5").unwrap();
         let g6 = Square::from_algebraic("g6").unwrap();
-        board.set(&a5, ColoredPiece(Color::Black, Piece::Bishop));
-        assert!(board.get(&g6).is_none());
-        assert!(board.get(&a5).is_some());
+        board.set(a5, ColoredPiece(Color::Black, Piece::Bishop));
+        assert!(board.get(g6).is_none());
+        assert!(board.get(a5).is_some());
         assert_eq!(
-            *board.get(&a5),
+            *board.get(a5),
             Some(ColoredPiece(Color::Black, Piece::Bishop))
         );
     }
