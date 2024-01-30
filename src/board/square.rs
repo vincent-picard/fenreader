@@ -8,6 +8,36 @@ pub struct Square {
 }
 
 impl Square {
+    fn translate(self, drow: i8, dcol: i8) -> Option<Self> {
+        let new_row: i8 = TryInto::<i8>::try_into(self.row).unwrap() + drow;
+        let new_col: i8 = TryInto::<i8>::try_into(self.col).unwrap() + dcol;
+        if (0 <= new_row && new_row < 8) && (0 <= new_col && new_col < 8) {
+            let new_square = Square {
+                row: new_row.try_into().unwrap(),
+                col: new_col.try_into().unwrap(),
+            };
+            Some(new_square)
+        } else {
+            None
+        }
+    }
+
+    pub fn right(self) -> Option<Self> {
+        self.translate(0, 1)
+    }
+    
+    pub fn left(self) -> Option<Self> {
+        self.translate(0, -1)
+    }
+
+    pub fn up(self) -> Option<Self> {
+        self.translate(1, 0)
+    }
+
+    pub fn down(self) -> Option<Self> {
+        self.translate(-1, 0)
+    }
+
     pub fn from_coord(row: u8, col: u8) -> Result<Square, &'static str> {
         if row >= 8 {
             Err("Invalid row number")
