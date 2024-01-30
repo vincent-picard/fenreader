@@ -200,6 +200,4 @@ mod tests {
         assert_eq!(Square::from_algebraic("a8"), Square::from_coord(7, 0));
         assert_eq!(Square::from_algebraic("h8"), Square::from_coord(7, 7));
     }
-
 }
-
