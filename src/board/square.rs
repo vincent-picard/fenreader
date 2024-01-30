@@ -132,7 +132,7 @@ mod tests {
         let mut dest = HashSet::new();
         for i in 0..8 {
             for j in 0..8 {
-                let square = Square::from_coord(i, j).expect("Should be valid coord");
+                let square = Square::from_coord(i, j).unwrap();
                 let index = square.to_index();
                 assert!(!dest.contains(&index));
                 dest.insert(index);
@@ -144,7 +144,7 @@ mod tests {
     fn to_index_bounds() {
         for i in 0..8 {
             for j in 0..8 {
-                let square = Square::from_coord(i, j).expect("Should be valid coord");
+                let square = Square::from_coord(i, j).unwrap();
                 let index = square.to_index();
                 assert!(index < 64);
             }
