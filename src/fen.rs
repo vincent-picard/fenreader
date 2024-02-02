@@ -86,18 +86,19 @@ fn string_into_board(s: &str) -> Result<Board, FenParseError> {
 }
 
 fn word_into_turn(w : &str) -> Result<Color, FenParseError> {
-    let mut chars: Vec<char> = w.chars().collect();
+    let chars: Vec<char> = w.chars().collect();
     if chars.len() != 1 {
         return Err(FenParseError::ParseTurn);
     };
     match chars[0] {
         'w' => Ok(Color::White),
         'b' => Ok(Color::Black),
+        _ => Err(FenParseError::ParseTurn),
     }
 }
 
 fn word_into_castles(w: &str) -> Result<(bool, bool, bool, bool), FenParseError> { 
-    let mut chars: Vec<char> = w.chars().collect();
+    let chars: Vec<char> = w.chars().collect();
     let n = chars.len();
     if n > 5 || n == 0 {
         return Err(FenParseError::ParseCastlePossibilities);
