@@ -24,6 +24,7 @@ pub enum FenParseError {
     ParseIntError(ParseIntError),
     ParseTurn,
     ParseCastlePossibilities,
+    ParseEnPassant,
 }
 
 impl From<ParseIntError> for FenParseError {
@@ -118,6 +119,19 @@ fn word_into_castles(w: &str) -> Result<(bool, bool, bool, bool), FenParseError>
     Ok((white_short, white_long, black_short, black_long))
 }
 
+fn word_into_enpassant(w: &str) -> Result<Option<Square>, FenParseError> {
+    let chars : Vec<char> = w.chars().collect();
+    if chars.len() == 1 && chars[0] == '-' {
+        Ok(None)
+    } else {
+        let sq = match Square::from_algebraic(w) {
+            Ok(sq) => sq,
+            _ => return Err(FenParseError::ParseEnPassant),
+        };
+        Ok(Some(sq))
+    }
+}
+
 impl Fen {
     pub fn parse(s: &str) -> Result<Self, FenParseError> {
         let words: Vec<&str> = s.split(' ').collect();
@@ -127,6 +141,9 @@ impl Fen {
         let board = string_into_board(words[0])?;
         let turn = word_into_turn(words[1])?;
         let (white_short_castle, white_long_castle, black_short_castle, black_long_castle) = word_into_castles(words[2])?;
+        let en_passant = word_into_enpassant(words[3])?;
+        let half_moves = words[4].parse()?;
+        let moves = words[5].parse()?;
         let fen = Fen {
             board,
             turn,
@@ -134,6 +151,9 @@ impl Fen {
             white_long_castle,
             black_short_castle,
             black_long_castle,
+            en_passant,
+            half_moves,
+            moves,
         };
         Ok(fen)
     }
