@@ -62,13 +62,13 @@ fn string_into_board(s: &str) -> Result<Board, FenParseError> {
         let mut chars = row.chars();
         let mut j = 0;
         while j < 8 {
-            let c = chars.next().ok_or_else(|| FenParseError::IncorrectRow(j))?;
+            let c = chars.next().ok_or_else(|| FenParseError::IncorrectRow(i as u8))?;
             if c.is_digit(10) {
                 let d = c.to_digit(10).unwrap();
                 if d == 0 || d > 8 {
-                    return Err(FenParseError::IncorrectRow(i));
+                    return Err(FenParseError::IncorrectRow(i as u8));
                 } else {
-                    j += d;
+                    j += d as u8;
                     continue;
                 }
             } else {
@@ -78,7 +78,7 @@ fn string_into_board(s: &str) -> Result<Board, FenParseError> {
             }
         }
         if j != 8 {
-            return Err(FenParseError::IncorrectRow(i));
+            return Err(FenParseError::IncorrectRow(i as u8));
         }
     };
     Ok(board)
@@ -126,7 +126,7 @@ impl Fen {
         };
         let board = string_into_board(words[0])?;
         let turn = word_into_turn(words[1])?;
-        let (white_short_castle, white_long_castle, black_short_castle, black_long_castle) = word_into_castles(word[2])?;
+        let (white_short_castle, white_long_castle, black_short_castle, black_long_castle) = word_into_castles(words[2])?;
         let fen = Fen {
             board,
             turn,
@@ -134,7 +134,7 @@ impl Fen {
             white_long_castle,
             black_short_castle,
             black_long_castle,
-        }
+        };
         Ok(fen)
     }
 }
