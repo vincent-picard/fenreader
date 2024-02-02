@@ -3,6 +3,7 @@ use crate::board::color::Color;
 use crate::board::piece::{ColoredPiece, Piece};
 use crate::board::square::Square;
 use std::error::Error;
+use std::num::ParseIntError;
 
 pub struct Fen {
     board: Board,
@@ -21,6 +22,13 @@ pub enum FenParseError {
     NumberOfRows,
     UnknownPiece(char),
     IncorrectRow(u8),
+    ParseIntError(ParseIntError),
+}
+
+impl From<ParseIntError> for FenParseError {
+   fn from(e: ParseIntError) -> Self {
+       FenParseError::ParseIntError(e)
+   }
 }
 
 fn letter_to_piece(c: char) -> Result<ColoredPiece, FenParseError> {
@@ -55,15 +63,25 @@ impl Fen {
         let mut board = Board::new();
         for i in 0..7 {
             let row = rows[7 - i];
-            let chars = row.chars();
+            let mut chars = row.chars();
             let mut j = 0;
             while j < 8 {
-                let c = chars.next();
-                let sq = Square::from_coord(i as u8, j as u8).unwrap();
-                let piece = letter_to_piece(c)?;
-                board.set(sq, piece);
-            }
-        };
+                let c = chars.next().ok_or_else(|| FenParseError::IncorrectRow(i as u8))?;
+                if c.is_digit(10) {
+                    let d = c.to_digit(10).unwrap();
+                    if d == 0 || d > 8 {
+                        return Err(FenParseError::IncorrectRow(i as u8));
+                    } else {
+                        j += d;
+                        continue;
+                    }
+                } else {
+                    let sq = Square::from_coord(i as u8, j as u8).unwrap();
+                    let piece = letter_to_piece(c)?;
+                    board.set(sq, piece);
+                }
+            };
+        }
         Ok()
     }
 }
