@@ -6,6 +6,7 @@ use color::Color;
 use piece::ColoredPiece;
 use square::Square;
 use std::iter;
+use std::fmt;
 
 pub struct Board {
     content: Vec<Option<ColoredPiece>>,
@@ -39,6 +40,12 @@ impl Default for Board {
     fn default() -> Self {
         Self::new()
     }
+}
+
+impl fmt::Display for Board {
+   fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "board")
+   }
 }
 
 #[cfg(test)]
