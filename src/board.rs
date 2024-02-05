@@ -1,6 +1,7 @@
 pub mod color;
 pub mod piece;
 pub mod square;
+pub mod row;
 
 use color::Color;
 use piece::ColoredPiece;
